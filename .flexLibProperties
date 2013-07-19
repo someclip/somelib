@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.someclip.framework.core.BaseView"/>
+    <classEntry path="com.someclip.framework.core.Module"/>
+    <classEntry path="com.someclip.framework.core.SystemConst"/>
+    <classEntry path="com.someclip.framework.interfaces.IBaseView"/>
+    <classEntry path="com.someclip.framework.interfaces.IModule"/>
+    <classEntry path="com.someclip.utils.cache.CacheManager"/>
+    <classEntry path="com.someclip.utils.load.ContentLoader"/>
+    <classEntry path="com.someclip.utils.load.DataLoader"/>
+    <classEntry path="com.someclip.utils.load.ILoader"/>
+    <classEntry path="com.someclip.utils.load.LoadManager"/>
+    <classEntry path="com.someclip.utils.load.LoadType"/>
+    <classEntry path="com.someclip.utils.queue.IQueue"/>
+    <classEntry path="com.someclip.utils.queue.IQueueItem"/>
+    <classEntry path="com.someclip.utils.queue.Queue"/>
+    <classEntry path="com.someclip.utils.queue.QueueItem"/>
+    <classEntry path="com.someclip.utils.media.SoundManager"/>
+    <classEntry path="com.someclip.ui.interfaces.ICellObject"/>
+    <classEntry path="com.someclip.ui.interfaces.ILabel"/>
+    <classEntry path="com.someclip.ui.impl.Label"/>
+    <classEntry path="com.someclip.ui.interfaces.IButton"/>
+    <classEntry path="com.someclip.ui.events.UIEvent"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
