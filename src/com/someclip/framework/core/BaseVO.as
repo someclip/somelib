@@ -9,6 +9,11 @@ package com.someclip.framework.core
 		{
 		}
 
+		/**
+		 * 将data的所有属性值赋予当前对象同名的（如果有）属性。如果发现有赋值失败的，请检查属性名是否一致。
+		 * @param data 目标对象
+		 *
+		 */
 		public function parse(data:Object):void
 		{
 			if (getQualifiedSuperclassName(data) == null)

@@ -7,6 +7,13 @@ package com.someclip.framework.core
 	import flash.events.Event;
 	import flash.utils.getQualifiedClassName;
 
+
+	/**
+	 * 抽象类：显示层的基类
+	 * @author Argus
+	 * @see com.someclip.framework.interfaces.IBaseView
+	 *
+	 */
 	public class BaseView extends Sprite implements IBaseView
 	{
 		private var _viewName:String;
