@@ -1,11 +1,14 @@
 package com.someclip.utils.media
 {
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
+	import flash.net.URLRequest;
 	import flash.utils.setTimeout;
 
 	public class SoundManager extends EventDispatcher
@@ -20,14 +23,14 @@ package com.someclip.utils.media
 		private var _to:Number;
 		private var _musicChannel:SoundChannel;
 		private var _sounds:Array;
-		private var _musics:Array;
+		private var _soundLoader:Sound;
+		private var _loops:int;
 
 		public function SoundManager()
 		{
 			if (_instance)
 				throw new Error("SoundManager Singleton Error!,SoundManager.instance获取实例");
 			_sounds=new Array();
-			_musics=new Array();
 		}
 
 		public function registerSound(label:String, soundIns:Sound):void
@@ -54,6 +57,30 @@ package com.someclip.utils.media
 			}
 		}
 
+		public function playMusicByLabel(label:String, startPos:Number=0, loops:int=0):void
+		{
+			var music:Sound=_sounds[label];
+			if (music)
+			{
+				if (_musicChannel != null)
+				{
+					_musicChannel.stop();
+					_musicChannel=null;
+				}
+				_musicChannel=music.play(startPos, loops);
+				music=null;
+			}
+		}
+
+		public function stopMusic():void
+		{
+			if (_musicChannel != null)
+			{
+				_musicChannel.stop();
+				_musicChannel=null;
+			}
+		}
+
 		public function playSound(soundIns:Sound):void
 		{
 			if (_isMute)
@@ -72,6 +99,43 @@ package com.someclip.utils.media
 			}
 			_musicChannel=musicIns.play(startPos, loops);
 			musicIns=null;
+		}
+
+		public function loadAndPlayMusic(source:String, startPos:Number, loops:int=0):void
+		{
+			if (_isMute)
+				return;
+			_loops=loops;
+			if (_soundLoader)
+			{
+				try
+				{
+					_soundLoader.close();
+				}
+				catch (e:Error)
+				{
+				}
+				_soundLoader=null;
+			}
+			if (_musicChannel)
+			{
+				_musicChannel.stop();
+				_musicChannel=null;
+			}
+			_soundLoader=new Sound();
+			_soundLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			_soundLoader.addEventListener(Event.OPEN, openHandler);
+			_soundLoader.load(new URLRequest(source));
+		}
+
+		private function openHandler(event:Event):void
+		{
+			_musicChannel=_soundLoader.play(0, _loops);
+		}
+
+		private function ioErrorHandler(event:IOErrorEvent):void
+		{
+
 		}
 
 		public function get isSoundMute():Boolean
