@@ -16,26 +16,13 @@ package com.someclip.framework.core
 		 */
 		public function parse(data:Object):void
 		{
-			if (getQualifiedSuperclassName(data) == null)
+			var xml:XML=describeType(this);
+			var vars:XMLList=xml.child("variable");
+			for each (var child:XML in vars)
 			{
-				for (var n:String in data)
+				if (data.hasOwnProperty(child.@name))
 				{
-					if (this.hasOwnProperty(n))
-					{
-						this[n]=data[n];
-					}
-				}
-			}
-			else
-			{
-				var xml:XML=describeType(data);
-				var vars:XMLList=xml.child("variable");
-				for each (var child:XML in vars)
-				{
-					if (this.hasOwnProperty(child.@name))
-					{
-						this[child.@name]=data[child.@name];
-					}
+					this[child.@name]=data[child.@name];
 				}
 			}
 		}
