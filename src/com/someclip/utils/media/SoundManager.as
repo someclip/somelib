@@ -14,7 +14,6 @@ package com.someclip.utils.media
 	public class SoundManager extends EventDispatcher
 	{
 		private static var _instance:SoundManager;
-		private var _isMute:Boolean;
 		private var _isMusicMute:Boolean;
 		private var _isSoundMute:Boolean;
 		private var _systemVolume:Number;
@@ -25,6 +24,7 @@ package com.someclip.utils.media
 		private var _sounds:Array;
 		private var _soundLoader:Sound;
 		private var _loops:int;
+		private var _source:String;
 
 		public function SoundManager()
 		{
@@ -57,21 +57,6 @@ package com.someclip.utils.media
 			}
 		}
 
-		public function playMusicByLabel(label:String, startPos:Number=0, loops:int=0):void
-		{
-			var music:Sound=_sounds[label];
-			if (music)
-			{
-				if (_musicChannel != null)
-				{
-					_musicChannel.stop();
-					_musicChannel=null;
-				}
-				_musicChannel=music.play(startPos, loops);
-				music=null;
-			}
-		}
-
 		public function stopMusic():void
 		{
 			if (_musicChannel != null)
@@ -83,8 +68,7 @@ package com.someclip.utils.media
 
 		public function playSound(soundIns:Sound):void
 		{
-			if (_isMute)
-				return;
+
 			if (_isSoundMute)
 				return;
 			soundIns.play(0, 0);
@@ -103,9 +87,11 @@ package com.someclip.utils.media
 
 		public function loadAndPlayMusic(source:String, startPos:Number, loops:int=0):void
 		{
-			if (_isMute)
-				return;
+			_source=source;
 			_loops=loops;
+			if (_isMusicMute)
+				return;
+
 			if (_soundLoader)
 			{
 				try
@@ -159,40 +145,26 @@ package com.someclip.utils.media
 			if (_musicChannel == null)
 				return;
 			var st:SoundTransform=_musicChannel.soundTransform;
-			if (_isMute)
+			if (_isMusicMute)
 			{
 				_musicVolume=st.volume;
 				st.volume=0;
+				_musicChannel.soundTransform=st;
+				st=null;
 			}
 			else
 			{
 				st.volume=_musicVolume;
+				_musicChannel.soundTransform=st;
+				st=null;
+				if (_source)
+				{
+					loadAndPlayMusic(_source, 0, _loops);
+				}
 			}
-			_musicChannel.soundTransform=st;
-			st=null;
+
 		}
 
-		public function get isMute():Boolean
-		{
-			return _isMute;
-		}
-
-		public function set isMute(value:Boolean):void
-		{
-			_isMute=value;
-			var st:SoundTransform=SoundMixer.soundTransform;
-			if (_isMute)
-			{
-				_systemVolume=st.volume;
-				st.volume=0;
-			}
-			else
-			{
-				st.volume=_systemVolume;
-			}
-			SoundMixer.soundTransform=st;
-			st=null;
-		}
 
 		private function easingVolume(from:Number, to:Number):void
 		{
