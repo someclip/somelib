@@ -62,16 +62,29 @@ package com.someclip.utils.media
 			if (_musicChannel != null)
 			{
 				_musicChannel.stop();
-				_musicChannel=null;
 			}
 		}
 
 		public function playSound(soundIns:Sound):void
 		{
-
 			if (_isSoundMute)
 				return;
 			soundIns.play(0, 0);
+		}
+
+		public function playMusicByLabel(label:String, startPos:Number=0, loops:int=0):void
+		{
+			var music:Sound=_sounds[label];
+			if (music)
+			{
+				if (_musicChannel != null)
+				{
+					_musicChannel.stop();
+					_musicChannel=null;
+				}
+				_musicChannel=music.play(startPos, loops);
+				music=null;
+			}
 		}
 
 		public function playMusic(musicIns:Sound, startPos:Number=0, loops:int=0):void
