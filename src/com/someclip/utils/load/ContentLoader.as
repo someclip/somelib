@@ -65,16 +65,16 @@ package com.someclip.utils.load
 				context.applicationDomain=_info.applicationDomain;
 			}
 			_domain=context.applicationDomain;
-			var tempUrl:String;
-			if (_info.itemURL.indexOf("?") != -1)
-			{
-				tempUrl=_info.itemURL + "&foo=" + Math.random();
-			}
-			else
-			{
-				tempUrl=_info.itemURL + "?foo=" + Math.random();
-			}
-			super.load(new URLRequest(tempUrl), context);
+//			var tempUrl:String;
+//			if (_info.itemURL.indexOf("?") != -1)
+//			{
+//				tempUrl=_info.itemURL + "&foo=" + Math.random();
+//			}
+//			else
+//			{
+//				tempUrl=_info.itemURL + "?foo=" + Math.random();
+//			}
+			super.load(new URLRequest(_info.itemURL), context);
 			context=null;
 		}
 
