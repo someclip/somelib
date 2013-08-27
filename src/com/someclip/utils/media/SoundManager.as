@@ -100,11 +100,24 @@ package com.someclip.utils.media
 
 		public function loadAndPlayMusic(source:String, startPos:Number, loops:int=0):void
 		{
+			if (_source == source)
+			{
+				_source=source;
+				if (_isMusicMute)
+					return;
+				if (_soundLoader && _musicChannel)
+				{
+					if (_musicChannel.position == 0)
+					{
+						_musicChannel=_soundLoader.play(0, 9999);
+					}
+				}
+				return;
+			}
 			_source=source;
 			_loops=loops;
 			if (_isMusicMute)
 				return;
-
 			if (_soundLoader)
 			{
 				try
@@ -119,7 +132,6 @@ package com.someclip.utils.media
 			if (_musicChannel)
 			{
 				_musicChannel.stop();
-				_musicChannel=null;
 			}
 			_soundLoader=new Sound();
 			_soundLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);

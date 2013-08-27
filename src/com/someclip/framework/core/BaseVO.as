@@ -14,7 +14,7 @@ package com.someclip.framework.core
 		 * @param data 目标对象
 		 *
 		 */
-		public function parse(data:Object):void
+		public function parse(data:Object, updateAll:Boolean=false):void
 		{
 			var xml:XML=describeType(this);
 			var vars:XMLList=xml.child("variable");
@@ -24,6 +24,28 @@ package com.someclip.framework.core
 				{
 					this[child.@name]=data[child.@name];
 				}
+				else
+				{
+					if (updateAll)
+					{
+						this[child.@name]=getDefaultValue(child.@type)
+					}
+				}
+			}
+		}
+
+		private function getDefaultValue(type:String):*
+		{
+			switch (type)
+			{
+				case "int":
+				case "Number":
+				case "uint":
+					return 0;
+				case "String":
+					return null;
+				case "Object":
+					return null;
 			}
 		}
 
