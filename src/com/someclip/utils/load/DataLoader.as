@@ -70,7 +70,7 @@ package com.someclip.utils.load
 						itemVars[label]=_info.itemVars[label];
 					}
 				}
-				itemVars.foo=Math.random();
+				//itemVars.foo=Math.random();
 				request.data=itemVars;
 				itemVars=null;
 			}

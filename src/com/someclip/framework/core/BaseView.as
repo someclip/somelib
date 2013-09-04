@@ -20,6 +20,8 @@ package com.someclip.framework.core
 
 		public function BaseView()
 		{
+			this.tabChildren=false;
+			this.tabEnabled=false;
 			_viewName=getQualifiedClassName(this);
 			if (_viewName.split("::")[1] == "BaseView")
 			{

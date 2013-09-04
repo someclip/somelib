@@ -61,7 +61,12 @@ package com.someclip.utils.media
 		{
 			if (_musicChannel != null)
 			{
-				_musicChannel.stop();
+//				_musicChannel.stop();
+				var transform:SoundTransform=_musicChannel.soundTransform;
+				_systemVolume=transform.volume;
+				transform.volume=0;
+				_musicChannel.soundTransform=transform;
+				transform=null;
 			}
 		}
 
@@ -112,6 +117,15 @@ package com.someclip.utils.media
 						_musicChannel=_soundLoader.play(0, 9999);
 					}
 				}
+				else
+				{
+					_source="";
+					loadAndPlayMusic(source, 0, 9999);
+				}
+				var transform:SoundTransform=_musicChannel.soundTransform;
+				transform.volume=1;
+				_musicChannel.soundTransform=transform;
+				transform=null;
 				return;
 			}
 			_source=source;
@@ -137,11 +151,16 @@ package com.someclip.utils.media
 			_soundLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			_soundLoader.addEventListener(Event.OPEN, openHandler);
 			_soundLoader.load(new URLRequest(source));
+
 		}
 
 		private function openHandler(event:Event):void
 		{
 			_musicChannel=_soundLoader.play(0, _loops);
+			var transform:SoundTransform=_musicChannel.soundTransform;
+			transform.volume=1;
+			_musicChannel.soundTransform=transform;
+			transform=null;
 		}
 
 		private function ioErrorHandler(event:IOErrorEvent):void
