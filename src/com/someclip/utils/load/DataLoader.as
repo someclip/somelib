@@ -85,7 +85,10 @@ package com.someclip.utils.load
 					super.dataFormat=URLLoaderDataFormat.TEXT;
 				}
 			}
-
+			if (request.data && request.data.toString() == "")
+			{
+				request.data=null;
+			}
 			request.url=_info.itemURL;
 			if (request.data)
 			{
