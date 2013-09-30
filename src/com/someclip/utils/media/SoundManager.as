@@ -219,6 +219,7 @@ package com.someclip.utils.media
 
 		private function easing():void
 		{
+
 			if (_from == _to)
 			{
 				return;
