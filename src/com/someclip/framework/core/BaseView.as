@@ -1,5 +1,6 @@
 package com.someclip.framework.core
 {
+	import com.someclip.events.CarryingEvent;
 	import com.someclip.framework.interfaces.IBaseView;
 	import com.someclip.framework.pattern.Facade;
 
@@ -59,6 +60,11 @@ package com.someclip.framework.core
 		{
 			Facade.instance.retrieveMediator(this.viewName.replace("View", "Mediator")).notifyAcceptable=false;
 			this.visible=false;
+		}
+
+		final public function boardcastError(errorCode:String, errorMsg:String):void
+		{
+			dispatchEvent(new CarryingEvent(CarryingEvent.SYS_ERROR_EVENT, {code: errorCode, msg: errorMsg}, true));
 		}
 
 		public function destory():void

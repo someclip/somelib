@@ -1,5 +1,6 @@
 package com.someclip.framework.pattern
 {
+	import com.someclip.events.CarryingEvent;
 	import com.someclip.framework.core.SystemConst;
 	import com.someclip.framework.interfaces.IBaseView;
 	import com.someclip.framework.interfaces.IMediator;
@@ -51,7 +52,16 @@ package com.someclip.framework.pattern
 		public function set viewComponent(view:IBaseView):void
 		{
 			if (_view == null)
+			{
 				_view=view;
+				_view.addEventListener(CarryingEvent.SYS_ERROR_EVENT, sysErrorEventHandler);
+			}
+		}
+
+		private function sysErrorEventHandler(event:CarryingEvent):void
+		{
+			event.stopPropagation();
+			boardcastError(event.data.code, event.data.msg);
 		}
 
 		public function onRegister():void
@@ -82,6 +92,11 @@ package com.someclip.framework.pattern
 		public function createView(viewName:String, params:Object=null):void
 		{
 			sendNotification(SystemConst.CREATE_VIEW, {name: viewName, param: params});
+		}
+
+		public function boardcastError(errorCode:String, errorMsg:String):void
+		{
+			sendNotification(SystemConst.SYS_ERROR_OCCUR, {code: errorCode, msg: errorMsg});
 		}
 
 		public function destory():void

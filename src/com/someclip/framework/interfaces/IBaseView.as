@@ -2,7 +2,7 @@ package com.someclip.framework.interfaces
 {
 	import flash.events.IEventDispatcher;
 
-	public interface IBaseView extends IEventDispatcher
+	public interface IBaseView extends IEventDispatcher, IErrorDispatcher
 	{
 		/**
 		 * 获取显示显示对象的名称，例子：com.someclip.view::ExampleView

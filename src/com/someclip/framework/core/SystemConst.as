@@ -28,6 +28,11 @@ package com.someclip.framework.core
 		 */
 		public static const SEND_REQUEST:String="send_request";
 
+		/**
+		 * 发生系统错误
+		 */
+		public static const SYS_ERROR_OCCUR:String="sys_error_occur";
+
 		public function SystemConst()
 		{
 		}

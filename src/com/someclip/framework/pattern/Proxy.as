@@ -1,5 +1,6 @@
 package com.someclip.framework.pattern
 {
+	import com.someclip.framework.core.SystemConst;
 	import com.someclip.framework.interfaces.IBaseView;
 	import com.someclip.framework.interfaces.IProxy;
 
@@ -48,6 +49,11 @@ package com.someclip.framework.pattern
 		public function sendNotification(notificationName:String, body:Object=null):void
 		{
 			Facade.instance.sendNotification(notificationName, body);
+		}
+
+		public function boardcastError(errorCode:String, errorMsg:String):void
+		{
+			sendNotification(SystemConst.SYS_ERROR_OCCUR, {code: errorCode, msg: errorMsg});
 		}
 
 		public function destory():void

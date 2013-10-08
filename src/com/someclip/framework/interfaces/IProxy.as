@@ -5,7 +5,7 @@ package com.someclip.framework.interfaces
 	 * ...
 	 * @author Argus
 	 */
-	public interface IProxy
+	public interface IProxy extends IErrorDispatcher
 	{
 		/**
 		 * 获取当前proxy的名称，example:com.someclip.proxy::ExampleProxy

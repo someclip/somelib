@@ -5,7 +5,7 @@ package com.someclip.framework.interfaces
 	 * ...
 	 * @author Argus
 	 */
-	public interface IMediator
+	public interface IMediator extends IErrorDispatcher
 	{
 		/**
 		 * 获取当前mediator的全名，example:com.someclip.mediator:ExampleMediator
