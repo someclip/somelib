@@ -96,7 +96,7 @@ package com.someclip.framework.pattern
 
 		public function boardcastError(errorCode:String, errorMsg:String):void
 		{
-			sendNotification(SystemConst.SYS_ERROR_OCCUR, {code: errorCode, msg: errorMsg});
+			sendNotification(SystemConst.SYS_ERROR_OCCUR, {from: this.mediatorName.substr(this.mediatorName.indexOf("::") + 2).replace("Mediator", ""), code: errorCode, msg: errorMsg});
 		}
 
 		public function destory():void

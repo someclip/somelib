@@ -53,7 +53,7 @@ package com.someclip.framework.pattern
 
 		public function boardcastError(errorCode:String, errorMsg:String):void
 		{
-			sendNotification(SystemConst.SYS_ERROR_OCCUR, {code: errorCode, msg: errorMsg});
+			sendNotification(SystemConst.SYS_ERROR_OCCUR, {from: this.proxyName.substr(this.proxyName.indexOf("::") + 2).replace("Proxy", ""), code: errorCode, msg: errorMsg});
 		}
 
 		public function destory():void
