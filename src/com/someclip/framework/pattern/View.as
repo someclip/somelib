@@ -67,7 +67,9 @@ package com.someclip.framework.pattern
 				var interetMediator:Array=interestedMap[interestName];
 				interetMediator.splice(interetMediator.indexOf(mediator), 1);
 			}
-			mediatorMap.splice(mediatorMap.indexOf(mediator), 1);
+			mediatorMap[mediatorName]=null;
+			delete mediatorMap[mediatorName];
+			//mediatorMap.splice(mediatorMap.indexOf(mediator), 1);
 		}
 
 		public function hasMediator(mediatorName:String):Boolean

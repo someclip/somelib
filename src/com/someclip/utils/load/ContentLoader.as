@@ -65,15 +65,6 @@ package com.someclip.utils.load
 				context.applicationDomain=_info.applicationDomain;
 			}
 			_domain=context.applicationDomain;
-//			var tempUrl:String;
-//			if (_info.itemURL.indexOf("?") != -1)
-//			{
-//				tempUrl=_info.itemURL + "&foo=" + Math.random();
-//			}
-//			else
-//			{
-//				tempUrl=_info.itemURL + "?foo=" + Math.random();
-//			}
 			super.load(new URLRequest(_info.itemURL), context);
 			context=null;
 		}
@@ -115,18 +106,20 @@ package com.someclip.utils.load
 				if (dso is MovieClip)
 					(dso as MovieClip).gotoAndStop(1);
 				CacheManager.instance.store(_info.cacheKey, dso, CacheManager.STORE_ONCE);
+				_domain=null;
 				dso=null;
 			}
 			else
 			{
 				CacheManager.instance.store(_info.cacheKey, null, CacheManager.STORE_ONCE, _domain);
+				_domain=null;
 			}
 			super.unload();
 			if (_info.completeHandler != null)
 			{
 				_info.completeHandler(_info);
-				_info=null;
 			}
+			_info=null;
 			if (_doneHandler != null)
 			{
 				_doneHandler();

@@ -8,6 +8,10 @@ package com.someclip.events
 
 
 		public static const SYS_ERROR_EVENT:String="sys_error_event";
+		/**
+		 * 模块销毁
+		 */
+		public static var SYS_DESTORY:String="sys_destory";
 
 		public function get data():Object
 		{

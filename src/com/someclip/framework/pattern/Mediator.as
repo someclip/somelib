@@ -51,6 +51,10 @@ package com.someclip.framework.pattern
 
 		public function set viewComponent(view:IBaseView):void
 		{
+			if (_view != null && view == null)
+			{
+				_view.removeEventListener(CarryingEvent.SYS_ERROR_EVENT, sysErrorEventHandler);
+			}
 			if (_view == null)
 			{
 				_view=view;
@@ -101,9 +105,16 @@ package com.someclip.framework.pattern
 
 		public function destory():void
 		{
-
+			if (_view)
+			{
+				_view=null;
+			}
 		}
 
+		public function destoryModule():void
+		{
+			sendNotification(SystemConst.SYS_DESTORY, this._mediatorName);
+		}
 	}
 
 }

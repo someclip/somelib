@@ -32,6 +32,10 @@ package com.someclip.framework.core
 		 * 发生系统错误
 		 */
 		public static const SYS_ERROR_OCCUR:String="sys_error_occur";
+		/**
+		 * 模块销毁
+		 */
+		public static var SYS_DESTORY:String="sys_destory";
 
 		public function SystemConst()
 		{
