@@ -13,7 +13,9 @@ package com.someclip.utils.load
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
+	import flash.system.Security;
 	import flash.system.SecurityDomain;
+	import flash.system.System;
 
 	public class ContentLoader extends Loader implements ILoader
 	{
@@ -46,7 +48,10 @@ package com.someclip.utils.load
 			_info=value;
 			_doneHandler=doneHandler;
 			var context:LoaderContext=new LoaderContext();
-			context.securityDomain=SecurityDomain.currentDomain;
+			if (Security.sandboxType == Security.REMOTE)
+			{
+				context.securityDomain=SecurityDomain.currentDomain;
+			}
 			if (_info.applicationDomain == null)
 			{
 				if (_info.itemType == LoadType.CODE)
