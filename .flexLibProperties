@@ -22,6 +22,8 @@
     <classEntry path="com.someclip.ui.impl.Label"/>
     <classEntry path="com.someclip.ui.interfaces.IButton"/>
     <classEntry path="com.someclip.ui.events.UIEvent"/>
+    <classEntry path="com.someclip.framework.interfaces.IErrorDispatcher"/>
+    <classEntry path="com.someclip.events.CarryingEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

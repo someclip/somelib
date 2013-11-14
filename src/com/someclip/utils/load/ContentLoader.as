@@ -102,8 +102,9 @@ package com.someclip.utils.load
 			}
 		}
 
-		private function completedHandler(event:Event):void
+		private function completedHandler(event:Event=null):void
 		{
+			trace("loadeddd");
 			_info.done=1;
 			if (_info.itemType == LoadType.CONTENT)
 			{
