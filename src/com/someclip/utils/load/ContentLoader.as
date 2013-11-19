@@ -22,22 +22,24 @@ package com.someclip.utils.load
 		private var _info:IQueueItem;
 		private var _doneHandler:Function;
 		private var _domain:ApplicationDomain;
+		private var _inited:Boolean;
 
 		public function ContentLoader()
 		{
+
 			bindListener();
 		}
 
 		private function bindListener():void
 		{
-			this.contentLoaderInfo.addEventListener(Event.COMPLETE, completedHandler);
-			this.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-			this.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityHandler);
+			super.contentLoaderInfo.addEventListener(Event.COMPLETE, completedHandler);
+			super.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			super.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityHandler);
 		}
 
 		public function get boardcastor():EventDispatcher
 		{
-			return this.contentLoaderInfo;
+			return super.contentLoaderInfo;
 		}
 
 		public function startLoad(value:IQueueItem, doneHandler:Function=null):void
@@ -45,6 +47,7 @@ package com.someclip.utils.load
 			_info=null;
 			_doneHandler=null;
 			_domain=null;
+			_inited=false;
 			_info=value;
 			_doneHandler=doneHandler;
 			var context:LoaderContext=new LoaderContext();
@@ -56,7 +59,8 @@ package com.someclip.utils.load
 			{
 				if (_info.itemType == LoadType.CODE)
 				{
-					context.applicationDomain=new ApplicationDomain(ApplicationDomain.currentDomain);
+					//context.applicationDomain=new ApplicationDomain(ApplicationDomain.currentDomain);
+					context.applicationDomain=ApplicationDomain.currentDomain;
 					_info.applicationDomain=context.applicationDomain;
 				}
 				else
@@ -104,7 +108,7 @@ package com.someclip.utils.load
 
 		private function completedHandler(event:Event=null):void
 		{
-			trace("loadeddd");
+			trace("loaded:", _info.itemURL);
 			_info.done=1;
 			if (_info.itemType == LoadType.CONTENT)
 			{

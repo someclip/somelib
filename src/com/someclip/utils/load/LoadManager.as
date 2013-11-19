@@ -123,7 +123,6 @@ package com.someclip.utils.load
 				if (queue.showProgress)
 				{
 					removeProgressHandler();
-
 					Facade.instance.sendNotification(SystemConst.HIDE_PROGRESS);
 				}
 				if (queue.completeHandler != null)
@@ -141,26 +140,33 @@ package com.someclip.utils.load
 			{
 				case LoadType.DATA:
 					_currentLoader=_dataLoader;
+//					_currentLoader=new DataLoader();
 					break;
 				case LoadType.DATA_VARS:
 					_currentLoader=_dataLoader;
+//					_currentLoader=new DataLoader();
 					break;
 				case LoadType.CONTENT:
 					_currentLoader=_contentLoader;
+//					_currentLoader=new ContentLoader();
 					break;
 				case LoadType.CODE:
 					_currentLoader=_contentLoader;
+//					_currentLoader=new ContentLoader();
 					break;
 				default:
 					startLoad();
 					return;
 			}
+//			_currentLoader.boardcastor.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_currentLoader.startLoad(sub, doneHandler);
 		}
 
 		private function doneHandler():void
 		{
+//			_currentLoader.boardcastor.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_currentLoader.destroy();
+			_currentLoader=null;
 			startLoad();
 		}
 	}

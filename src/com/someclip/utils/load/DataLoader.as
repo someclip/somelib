@@ -90,14 +90,14 @@ package com.someclip.utils.load
 				request.data=null;
 			}
 			request.url=_info.itemURL;
-			if (request.data)
-			{
-				trace(request.url + "?" + request.data.toString());
-			}
-			else
-			{
-				trace(request.url);
-			}
+//			if (request.data)
+//			{
+//				trace(request.url + "?" + request.data.toString());
+//			}
+//			else
+//			{
+//				trace(request.url);
+//			}
 			super.load(request);
 			request=null;
 		}
@@ -123,7 +123,7 @@ package com.someclip.utils.load
 
 		private function ioErrorHandler(event:IOErrorEvent):void
 		{
-			trace(event.toString())
+			//trace(event.toString())
 			_info.done=-1;
 			if (_info.completeHandler != null)
 			{
