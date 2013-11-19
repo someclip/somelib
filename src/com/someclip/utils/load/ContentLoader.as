@@ -22,7 +22,6 @@ package com.someclip.utils.load
 		private var _info:IQueueItem;
 		private var _doneHandler:Function;
 		private var _domain:ApplicationDomain;
-		private var _inited:Boolean;
 
 		public function ContentLoader()
 		{
@@ -47,7 +46,6 @@ package com.someclip.utils.load
 			_info=null;
 			_doneHandler=null;
 			_domain=null;
-			_inited=false;
 			_info=value;
 			_doneHandler=doneHandler;
 			var context:LoaderContext=new LoaderContext();
@@ -139,6 +137,19 @@ package com.someclip.utils.load
 		override public function load(request:URLRequest, context:LoaderContext=null):void
 		{
 			trace("请使用startLoad方法！");
+		}
+
+		public function stop():void
+		{
+			try
+			{
+				super.close();
+				super.unload();
+			}
+			catch (e:*)
+			{
+
+			}
 		}
 
 		public function destroy():void

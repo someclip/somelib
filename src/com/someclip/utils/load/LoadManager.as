@@ -162,6 +162,25 @@ package com.someclip.utils.load
 			_currentLoader.startLoad(sub, doneHandler);
 		}
 
+		public function stopAll():void
+		{
+			if (_currentLoader)
+			{
+				_currentLoader.stop();
+				_currentLoader.destroy();
+				_currentLoader=null;
+			}
+			_handler=null;
+			_isLoading=false;
+			if (_queue)
+			{
+				if (_queue.length > 0)
+				{
+					_queue.length=0;
+				}
+			}
+		}
+
 		private function doneHandler():void
 		{
 //			_currentLoader.boardcastor.removeEventListener(ProgressEvent.PROGRESS, progressHandler);

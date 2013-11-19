@@ -154,6 +154,18 @@ package com.someclip.utils.load
 			}
 		}
 
+		public function stop():void
+		{
+			try
+			{
+				super.close();
+			}
+			catch (e:*)
+			{
+
+			}
+		}
+
 		public function destroy():void
 		{
 		}
