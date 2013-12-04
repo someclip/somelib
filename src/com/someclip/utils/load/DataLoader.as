@@ -90,14 +90,14 @@ package com.someclip.utils.load
 				request.data=null;
 			}
 			request.url=_info.itemURL;
-//			if (request.data)
-//			{
-//				trace(request.url + "?" + request.data.toString());
-//			}
-//			else
-//			{
-//				trace(request.url);
-//			}
+			if (request.data)
+			{
+				trace(request.url + "?" + request.data.toString());
+			}
+			else
+			{
+				trace(request.url);
+			}
 			super.load(request);
 			request=null;
 		}

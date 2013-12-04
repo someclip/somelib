@@ -114,6 +114,7 @@ package com.someclip.framework.pattern
 		public function destoryModule():void
 		{
 			//_view.visible=false;
+			this.notifyAcceptable=false;
 			sendNotification(SystemConst.SYS_DESTORY, this._mediatorName);
 		}
 	}
