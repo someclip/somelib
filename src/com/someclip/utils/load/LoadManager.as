@@ -1,192 +1,108 @@
-package com.someclip.utils.load
+package com.someclip.utils.load 
 {
 	import com.someclip.framework.core.SystemConst;
 	import com.someclip.framework.pattern.Facade;
-	import com.someclip.utils.queue.IQueue;
-	import com.someclip.utils.queue.IQueueItem;
-	import com.someclip.utils.queue.Queue;
-
-	import flash.display.Loader;
+	import com.someclip.utils.load.loader.MultiLoader;
+	import com.someclip.utils.load.queue.IQueue;
+	
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
-	import flash.events.SecurityErrorEvent;
-	import flash.utils.getTimer;
 
-	public class LoadManager extends EventDispatcher
+	/**
+	 * 加载管理类
+	 * @author Argus
+	 */
+	public class LoadManager 
 	{
-		private static var _instance:LoadManager;
-		public static const SHOW_PROGRESS:String="show_progress";
-		public static const HIDE_PROGRESS:String="hide_progress";
+		
+		private static var _ins:LoadManager;
 		private var _queue:Array;
-		private var _isLoading:Boolean;
-		private var _currentLoader:ILoader;
-		private var _dataLoader:DataLoader;
-		private var _contentLoader:ContentLoader;
-		private var _handler:Function;
-
-		public function LoadManager()
+		private var _loader:MultiLoader;
+		private var _callBack:Function;
+		public function LoadManager() 
 		{
-			if (_instance)
-				throw new Error("LoadManager是单例，LoadManager.instance获取实例!!!");
-			_queue=new Array();
-			_isLoading=false;
-			_dataLoader=new DataLoader();
-			_dataLoader.boardcastor.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-			_contentLoader=new ContentLoader();
-			_contentLoader.boardcastor.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+			if (_ins)
+				throw new Error("LoadManager单例！！");
+			_queue = new Array();
+			_loader = new MultiLoader();
+			_loader.addEventListener("QUEUE_DONE", queueHandler);
 		}
-
 		public static function get instance():LoadManager
 		{
-			if (!_instance)
-				_instance=new LoadManager();
-			return _instance;
+			if (!_ins)
+				_ins = new LoadManager();
+			return _ins;
 		}
-
-		/**
-		 * 加载一个队列
-		 * 队列内包含组成队列的有序元素，加载会按队列顺序一直加载到最后一个元素为止，不管发生什么错误都会直接进行后续加载。
-		 * 加载完成的回调请参考Queue类。
-		 * @see com.someclip.utils.queue.Queue;
-		 * @see com.someclip.utils.queue.IQueue;
-		 * @see com.someclip.utils.queue.QueueItem;
-		 * @see com.someclip.utils.queue.IQueueItem;
-		 * @param queue 队列
-		 *
-		 */
-		public function load(queue:IQueue):void
+		public function addQueue(queue:IQueue):void
 		{
+			trace("添加:",queue,queue.queueURL,"   到队列中");
 			_queue.push(queue);
-			if (!_isLoading)
-			{
-				doLoad();
-			}
 		}
-
+		
 		/**
-		 * 插入进度处理函数，进度条用!
-		 * @param handler
-		 *
+		 * 当所有队列都加载完成时调用callBack函数（如果有） 
+		 * @param callBack
+		 * 
 		 */
-		public function insertProgressHandler(handler:Function):void
+		public function startQueue(callBack:Function=null):void
 		{
-			_handler=handler;
+			_callBack=callBack;
+			checkQueue();
 		}
-
-		/**
-		 * 移除进度处理函数，进度条用！
-		 *
-		 */
-		public function removeProgressHandler():void
+		
+		private function checkQueue():void 
 		{
-			_handler=null;
-		}
-
-		private function progressHandler(e:ProgressEvent):void
-		{
-			if (_handler != null)
-			{
-				_handler((_queue[0] as Queue).queueTitle, (_queue[0] as Queue).itemTitle, e);
-			}
-		}
-
-		private function doLoad():void
-		{
-			_isLoading=true;
 			if (_queue.length > 0)
 			{
-				if ((_queue[0] as IQueue).showProgress)
+				if(_loader.free)
 				{
-					//发出消息显示progressbar
-					Facade.instance.sendNotification(SystemConst.REQUIRE_PROGRESS);
+					_loader.startLoad(_queue[0] as IQueue);
+					if((_queue[0] as IQueue).showProgress)
+					{
+						Facade.instance.sendNotification(SystemConst.REQUIRE_PROGRESS);
+					}
 				}
-				startLoad();
-			}
-			else
+			}else
 			{
-				_isLoading=false;
+				endQueue();
 			}
 		}
-
-		private function startLoad():void
+		
+		public function insertProgressHandler(progressHandler:Function):void
 		{
-			var queue:IQueue=_queue[0] as IQueue;
-			var queueItem:IQueueItem=queue.getNext();
-			if (queueItem && queueItem.done == 0)
+			_loader.progressHandler=progressHandler;
+		}
+		
+		public function removeProgressHandler():void
+		{
+			_loader.progressHandler=null;
+		}
+		private function endQueue():void
+		{
+			if(_callBack!=null)
 			{
-				loadSub(queueItem);
+				_callBack();
+				_callBack=null;
 			}
-			else
+		}
+		
+		private function queueHandler(e:Event):void 
+		{
+			if (_queue.length > 0)
 			{
-				if (queue.showProgress)
+				if((_queue[0] as IQueue).showProgress)
 				{
-					removeProgressHandler();
 					Facade.instance.sendNotification(SystemConst.HIDE_PROGRESS);
 				}
-				if (queue.completeHandler != null)
-				{
-					queue.completeHandler(queue);
-				}
 				_queue.shift();
-				doLoad();
 			}
-		}
-
-		private function loadSub(sub:IQueueItem):void
-		{
-			switch (sub.itemType)
+			if (_queue.length > 0)
 			{
-				case LoadType.DATA:
-					_currentLoader=_dataLoader;
-//					_currentLoader=new DataLoader();
-					break;
-				case LoadType.DATA_VARS:
-					_currentLoader=_dataLoader;
-//					_currentLoader=new DataLoader();
-					break;
-				case LoadType.CONTENT:
-					_currentLoader=_contentLoader;
-//					_currentLoader=new ContentLoader();
-					break;
-				case LoadType.CODE:
-					_currentLoader=_contentLoader;
-//					_currentLoader=new ContentLoader();
-					break;
-				default:
-					startLoad();
-					return;
-			}
-//			_currentLoader.boardcastor.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-			_currentLoader.startLoad(sub, doneHandler);
-		}
-
-		public function stopAll():void
-		{
-			if (_currentLoader)
+				checkQueue();
+			}else
 			{
-				_currentLoader.stop();
-				_currentLoader.destroy();
-				_currentLoader=null;
+				endQueue();
 			}
-			_handler=null;
-			_isLoading=false;
-			if (_queue)
-			{
-				if (_queue.length > 0)
-				{
-					_queue.length=0;
-				}
-			}
-		}
-
-		private function doneHandler():void
-		{
-//			_currentLoader.boardcastor.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
-			_currentLoader.destroy();
-			_currentLoader=null;
-			startLoad();
 		}
 	}
+
 }
