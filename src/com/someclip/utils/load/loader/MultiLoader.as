@@ -192,7 +192,7 @@ package com.someclip.utils.load.loader
 			_posLoader = new Loader();
 			_posLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handlePosLoaderComplete);
 			var lc:LoaderContext = new LoaderContext();
-			lc.allowCodeImport = true;
+			//lc.allowCodeImport = true;
 //			if (Security.sandboxType == Security.REMOTE)
 //			{
 //				lc.securityDomain = SecurityDomain.currentDomain;
