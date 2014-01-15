@@ -30,6 +30,14 @@ package com.someclip.utils.load
 		 * 通过反射获取内容的对象
 		 */
 		public static const CONTENT_SWF_CODE:String = 'content_swf_has_code';
+		/**
+		 * loadBytes加载的资源（有代码），queue.data设置为目标bytearray;
+		 */
+		public static const CONTENT_SWF_CODE_FROM_DATA:String = "content_swf_has_code_from_data";
+		/**
+		 * loadBytes加载的资源（无代码），queue.data设置为目标bytearray;
+		 */
+		public static const CONTENT_SWF_NO_CODE_FROM_DATA:String = "content_swf_no_code_from_data";
 		public function DataType() 
 		{
 			

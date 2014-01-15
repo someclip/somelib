@@ -5,6 +5,7 @@ package com.someclip.utils.load.loader
 	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
+	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -63,7 +64,7 @@ package com.someclip.utils.load.loader
 		
 		private function preLoad():void
 		{
-			if (_queue.queueURL == null || _queue.queueURL == "")
+			if ((_queue.queueURL == null || _queue.queueURL == "") && _queue.data==null)
 			{
 				_queue.statue = 0;
 				doneHandler();
@@ -88,7 +89,17 @@ package com.someclip.utils.load.loader
 						break;
 				}
 			}
-			startPreLoad();
+			switch(_queue.dataType)
+			{
+				case DataType.CONTENT_SWF_CODE_FROM_DATA:
+				case DataType.CONTENT_SWF_NO_CODE_FROM_DATA:
+					posLoad();
+					break;
+				default:
+					startPreLoad();
+					break;
+			}
+			
 		}
 		
 		private function startPreLoad():void
@@ -147,6 +158,15 @@ package com.someclip.utils.load.loader
 		{
 			trace("io error");
 			clearPreLoader();
+			_queue.statue = 0;
+			if (_queue.queueHandler != null)
+			{
+				_queue.queueHandler(_queue);
+			}
+			if (doneHandler != null)
+			{
+				doneHandler();
+			}
 		}
 		
 		private function handlePreLoaderComplete(e:Event):void
@@ -154,10 +174,21 @@ package com.someclip.utils.load.loader
 			_queue.data = _preLoader.data;
 			if(_queue.dataType==DataType.DATA_STRING)
 			{
-				trace("取得数据：",_queue.data,"   来自:",_queue.queueURL)
+				trace("取得数据：",String(_queue.data).substr(0,100),"   来自:",_queue.queueURL)
 			}
 			_queue.statue = 1;
 			clearPreLoader();
+			switch (_queue.dataType)
+			{
+				case DataType.DATA_STRING: 
+				case DataType.DATA_VAR:
+				case DataType.DATA_BYTE:
+					doneHandler();
+					break;
+				default:
+					posLoad();
+					break;
+			}
 		}
 		
 		private function clearPreLoader():void 
@@ -174,17 +205,6 @@ package com.someclip.utils.load.loader
 			_preLoader.removeEventListener(ProgressEvent.PROGRESS,handlePreloaderProgress);
 			_preLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, handlePreLoaderSecurityError);
 			_preLoader = null;
-			switch (_queue.dataType)
-			{
-				case DataType.DATA_STRING: 
-				case DataType.DATA_VAR:
-				case DataType.DATA_BYTE:
-					doneHandler();
-					break;
-				default:
-					posLoad();
-					break;
-			}
 		}
 		
 		private function posLoad():void 
@@ -219,13 +239,23 @@ package com.someclip.utils.load.loader
 			{
 				trace(e);
 			}
+			if (_queue.content != null && _queue.content is MovieClip)
+			{
+				(_queue.content as MovieClip).gotoAndStop(1);
+			}
 			clearPosLoader();
 			doneHandler();
 		}
 		
 		private function clearPosLoader():void 
 		{
-			_posLoader.unload();
+			try
+			{
+				_posLoader.unload();
+			}catch(e:Error)
+			{
+				trace(e);
+			}
 			_posLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handlePosLoaderComplete);
 			_posLoader = null;
 		}
@@ -243,7 +273,19 @@ package com.someclip.utils.load.loader
 		
 		public function stopAndQuit():void
 		{
-		
+			if(_preLoader!=null)
+			{
+				clearPreLoader();
+			}
+			if(_posLoader!=null)
+			{
+				clearPosLoader();
+			}
+			if(_queue)
+			{
+				_queue=null;
+			}
+			_free=true;
 		}
 		
 		public function get free():Boolean 

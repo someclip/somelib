@@ -59,6 +59,9 @@ package com.someclip.utils.load
 					if((_queue[0] as IQueue).showProgress)
 					{
 						Facade.instance.sendNotification(SystemConst.REQUIRE_PROGRESS);
+					}else
+					{
+						Facade.instance.sendNotification(SystemConst.HIDE_PROGRESS);
 					}
 				}
 			}else
@@ -102,6 +105,17 @@ package com.someclip.utils.load
 			{
 				endQueue();
 			}
+		}
+		public function stopAll():void
+		{
+			if(_loader)
+			{
+				_loader.stopAndQuit();
+			}
+			_queue.length=0;
+			_loader.progressHandler=null;
+			_callBack=null;
+			Facade.instance.sendNotification(SystemConst.HIDE_PROGRESS);
 		}
 	}
 
