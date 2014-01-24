@@ -52,12 +52,13 @@ package com.someclip.utils.load.loader
 
 		public function startLoad(queue:IQueue):void
 		{
+			//trace("_free:",_free);
 			if (!_free)
 			{
 				return;
 			}
 			_free = false;
-			trace("开始从:",queue.queueURL,"   获取内容");
+			//trace("开始从:",queue.queueURL,"   获取内容");
 			_queue = queue;
 			preLoad();
 		}
@@ -150,23 +151,18 @@ package com.someclip.utils.load.loader
 		
 		private function handlePreLoaderSecurityError(e:SecurityErrorEvent):void
 		{
-			trace("security error");
+			//trace("security error");
 			clearPreLoader();
+			_queue.statue = 0;
+			doneHandler();
 		}
 		
 		private function handlePreLoaderIoError(e:IOErrorEvent):void
 		{
-			trace("io error");
+			//trace("io error:",_queue.queueURL);
 			clearPreLoader();
 			_queue.statue = 0;
-			if (_queue.queueHandler != null)
-			{
-				_queue.queueHandler(_queue);
-			}
-			if (doneHandler != null)
-			{
-				doneHandler();
-			}
+			doneHandler();
 		}
 		
 		private function handlePreLoaderComplete(e:Event):void
@@ -174,7 +170,7 @@ package com.someclip.utils.load.loader
 			_queue.data = _preLoader.data;
 			if(_queue.dataType==DataType.DATA_STRING)
 			{
-				trace("取得数据：",String(_queue.data).substr(0,100),"   来自:",_queue.queueURL)
+				//trace("取得数据：",String(_queue.data).substr(0,100),"   来自:",_queue.queueURL)
 			}
 			_queue.statue = 1;
 			clearPreLoader();
@@ -198,7 +194,7 @@ package com.someclip.utils.load.loader
 				_preLoader.close();
 			}catch (e:Error)
 			{
-				trace(e);
+				//trace(e);
 			}
 			_preLoader.removeEventListener(Event.COMPLETE, handlePreLoaderComplete);
 			_preLoader.removeEventListener(IOErrorEvent.IO_ERROR, handlePreLoaderIoError);
@@ -231,13 +227,13 @@ package com.someclip.utils.load.loader
 		
 		private function handlePosLoaderComplete(e:Event):void 
 		{
-			trace("从：",_queue.queueURL," 获取内容成功")
+			//trace("从：",_queue.queueURL," 获取内容成功")
 			try
 			{
 				_queue.content = _posLoader.content as DisplayObject;
 			}catch (e:Error)
 			{
-				trace(e);
+				//trace(e);
 			}
 			if (_queue.content != null && _queue.content is MovieClip)
 			{
@@ -254,7 +250,7 @@ package com.someclip.utils.load.loader
 				_posLoader.unload();
 			}catch(e:Error)
 			{
-				trace(e);
+				//trace(e);
 			}
 			_posLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handlePosLoaderComplete);
 			_posLoader = null;
@@ -286,6 +282,11 @@ package com.someclip.utils.load.loader
 				_queue=null;
 			}
 			_free=true;
+		}
+		
+		public function get queue():IQueue
+		{
+			return _queue;
 		}
 		
 		public function get free():Boolean 

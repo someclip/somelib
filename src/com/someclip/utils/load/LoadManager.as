@@ -4,6 +4,7 @@ package com.someclip.utils.load
 	import com.someclip.framework.pattern.Facade;
 	import com.someclip.utils.load.loader.MultiLoader;
 	import com.someclip.utils.load.queue.IQueue;
+	import com.someclip.utils.load.queue.Queue;
 	
 	import flash.events.Event;
 
@@ -34,7 +35,7 @@ package com.someclip.utils.load
 		}
 		public function addQueue(queue:IQueue):void
 		{
-			trace("添加:",queue,queue.queueURL,"   到队列中");
+			//trace("添加:",queue,queue.queueURL,"   到队列中");
 			_queue.push(queue);
 		}
 		
@@ -45,12 +46,14 @@ package com.someclip.utils.load
 		 */
 		public function startQueue(callBack:Function=null):void
 		{
+			//trace("start queue");
 			_callBack=callBack;
 			checkQueue();
 		}
 		
 		private function checkQueue():void 
 		{
+			//trace("check:",_queue.length,_loader.free);
 			if (_queue.length > 0)
 			{
 				if(_loader.free)
@@ -106,6 +109,37 @@ package com.someclip.utils.load
 				endQueue();
 			}
 		}
+		
+		public function removeQueues(list:Array):void
+		{
+			for each(var queue:IQueue in list)
+			{
+				removeQueue(queue);
+			}
+		}
+		
+		public function removeQueue(queue:IQueue):void
+		{
+			var isCurrent:Boolean;
+			for(var i:int=0;i<_queue.length;i++)
+			{
+				if(_queue[i]==queue)
+				{
+					_queue.splice(i,1);
+					i--;
+					if(_loader.queue==queue)
+					{
+						_loader.stopAndQuit();
+						isCurrent=true;
+					}
+				}
+			}
+			if(isCurrent)
+			{
+				checkQueue();
+			}
+		}
+		
 		public function stopAll():void
 		{
 			if(_loader)
