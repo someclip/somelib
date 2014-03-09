@@ -11,6 +11,7 @@ package com.someclip.framework.interfaces
 		function retrieveMediator(mediatorName:String):IMediator;
 		function removeMediator(mediatorName:String):void;
 		function hasMediator(mediatorName:String):Boolean;
+		function removeObserver(notificationName:String,mediatorName:String):void;
 		function registerProxy(proxy:IProxy):void;
 		function retrieveProxy(proxyName:String):IProxy;
 		function removeProxy(proxyName:String):void;

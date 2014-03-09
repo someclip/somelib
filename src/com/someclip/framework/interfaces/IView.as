@@ -12,6 +12,7 @@ package com.someclip.framework.interfaces
 		function removeMediator(mediatorName:String):void;
 		function hasMediator(mediatorName:String):Boolean;
 		function notifyObserver(note:INotification):void;
+		function removeObserver(notificationName:String,mediatorName:String):void
 	}
 	
 }

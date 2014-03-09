@@ -48,6 +48,11 @@ package com.someclip.framework.pattern
 			return View.instance.hasMediator(mediatorName);
 		}
 
+		public function removeObserver(notificationName:String,mediatorName:String):void
+		{
+			View.instance.removeObserver(notificationName,mediatorName);
+		}
+		
 		public function registerProxy(proxy:IProxy):void
 		{
 			Model.instance.registerProxy(proxy);

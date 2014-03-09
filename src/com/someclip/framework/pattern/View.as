@@ -76,7 +76,23 @@ package com.someclip.framework.pattern
 		{
 			return mediatorMap[mediatorName] != null;
 		}
-
+		
+		public function removeObserver(notificationName:String,mediatorName:String):void
+		{
+			var interestMediator:Array=interestedMap[notificationName];
+			if (interestMediator != null && interestMediator.length > 0)
+			{
+				for (var i:int=0;i<interestMediator.length;i++)
+				{
+					if (interestMediator[i].mediatorName == mediatorName)
+					{
+						interestMediator.splice(i,1);
+						i--;
+					}
+				}
+			}
+		}
+		
 		public function notifyObserver(note:INotification):void
 		{
 			var interestMediator:Array=interestedMap[note.name];
